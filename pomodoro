@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /home/filip/Projects/pomodoro
+python3 main.py
