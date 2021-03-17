@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd /home/filip/Projects/pomodoro
-python3 main.py
+python3 main.py "$1" "$2" "$3"
