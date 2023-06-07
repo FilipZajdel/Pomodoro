@@ -8,35 +8,32 @@ from playsound import playsound
 from pathlib import Path
 from collections import OrderedDict
 
-app_path_abs = Path(__file__).resolve().parent
-pomodoro_icon_path = app_path_abs.joinpath("icons/tomato.png")
-sounds_paths = { "ringbell" : str(app_path_abs.joinpath("sounds/bell_sound.mp3")) }
-stats_directory = "stats"
+from pomodoro import paths
 
 full_periods = 0
 
 def on_work():
-    Thread(target=playsound, args=(sounds_paths["ringbell"], )).start()
+    Thread(target=playsound, args=(paths.sounds["ringbell"], )).start()
     subprocess.call(["notify-send",
         "Pomodoro", "Break has finished, go back to work!",
-        f"--icon={pomodoro_icon_path}"])
+        f"--icon={paths.icon}"])
 
 
 def on_break():
     global full_periods
 
-    Thread(target=playsound, args=(sounds_paths["ringbell"], )).start()
+    Thread(target=playsound, args=(paths.sounds["ringbell"], )).start()
     subprocess.call(["notify-send",
         "Pomodoro", "Take a break!",
-        f"--icon={pomodoro_icon_path}"])
+        f"--icon={paths.icon}"])
     full_periods += 1
 
 
 def on_selftest():
-    Thread(target=playsound, args=(sounds_paths["ringbell"], )).start()
+    Thread(target=playsound, args=(paths.sounds["ringbell"], )).start()
     subprocess.call(["notify-send",
         "Pomodoro", "Make an assignment!",
-        f"--icon={pomodoro_icon_path}"])
+        f"--icon={paths.icon}"])
 
 def states_sequencer():
     global states
@@ -148,8 +145,7 @@ interface_keys = {
 
 exit_prompt = """I hope your work was fruitful. Thanks for using Pomodoro!"""
 
-if "__main__" == __name__:
-
+def main():
     cli()
 
     try:
@@ -180,7 +176,7 @@ if "__main__" == __name__:
                     state_active = True
                 elif user_input == "s":
                     current_time = get_current_time_formatted()
-                    stats_file_path = Path(f"{stats_directory}/{current_time}.json")
+                    stats_file_path = Path(f"{paths.stats_dir}/{current_time}.json")
                     save_stats(start_time, current_time, stats_file_path, full_periods)
                     break
                 else:
@@ -192,3 +188,6 @@ if "__main__" == __name__:
 
     finally:
         print(f"\r{exit_prompt}")
+
+if "__main__" == __name__:
+    main()

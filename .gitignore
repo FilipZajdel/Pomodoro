@@ -1,2 +1,5 @@
 *.log
 *.json
+stats/*.json
+pomodoro.egg-info
+.venv
